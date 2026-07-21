@@ -1,0 +1,43 @@
+{
+  "c1_error_drift": {
+    "passed": true,
+    "errors": [
+      0.036250000000000004,
+      0.06125,
+      0.25625
+    ]
+  },
+  "c2_hardness": {
+    "passed": true,
+    "excess": [
+      0.0,
+      0.0,
+      0.15624999999999997
+    ]
+  },
+  "c3_dimension": {
+    "passed": true,
+    "errors": [
+      0.06125,
+      0.06125,
+      0.11625000000000002
+    ]
+  },
+  "c4_lower_bound": {
+    "passed": true,
+    "min_error": 0.036250000000000004
+  },
+  "c5_low_degree": {
+    "passed": true,
+    "err_linear": 0.275,
+    "err_quadratic": 0.245
+  },
+  "c6_realizable": {
+    "passed": true,
+    "realizable_errors": [
+      0.01125,
+      0.06125,
+      0.25875000000000004
+    ]
+  }
+}
