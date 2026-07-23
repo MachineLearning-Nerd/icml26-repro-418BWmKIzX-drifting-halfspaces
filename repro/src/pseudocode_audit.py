@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import ast
+import hashlib
 import json
 import subprocess
 import time
@@ -11,6 +12,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 ARTIFACTS = ROOT / ".openresearch" / "artifacts" / "pseudocode_audit"
 FROZEN_BASELINE_SHA = "4b976c8acfb983bb4d74d944f9a5ba25e98667e7"
+FROZEN_VERIFIER_SHA256 = (
+    "fa42bf70ebc6c6a2491aa8ad0a5a85461d0e21c77698d3573ba5e18b023e9bf4"
+)
 
 
 def loaded_names(function: ast.FunctionDef) -> set[str]:
@@ -33,12 +37,9 @@ def functions(path: Path) -> dict[str, ast.FunctionDef]:
 def audit() -> dict[str, bool]:
     halfspace_path = ROOT / "repro/src/halfspaces.py"
     verifier_path = ROOT / "repro/src/verify_hs.py"
-    baseline_verifier = subprocess.check_output(
-        ["git", "show", f"{FROZEN_BASELINE_SHA}:repro/src/verify_hs.py"],
-        cwd=ROOT,
-        text=True,
-    )
+    frozen_verifier_path = ROOT / "repro/reference/frozen_judged_verify_hs.py.txt"
     halfspace_text = halfspace_path.read_text()
+    baseline_verifier = frozen_verifier_path.read_text()
     parsed = functions(halfspace_path)
     generator = parsed["make_drifting_data"]
     learner = parsed["learn_halfspace"]
@@ -55,6 +56,10 @@ def audit() -> dict[str, bool]:
         "learner_has_no_eta_input": "eta" not in learner_args,
         "paper_gradient_absent": "(1 - 2 * eta)" not in halfspace_text
         and "(1-2*eta)" not in halfspace_text,
+        "frozen_verifier_hash_matches": hashlib.sha256(
+            baseline_verifier.encode()
+        ).hexdigest()
+        == FROZEN_VERIFIER_SHA256,
         "claim4_condition_ignores_reported_min_error": "c4 = excess[-1] > 0.01"
         in baseline_verifier,
         "claim6_condition_uses_low_drift_but_reports_high_drift": (
@@ -67,6 +72,7 @@ def audit() -> dict[str, bool]:
 
 def validate(issues: dict[str, bool]) -> tuple[int, list[str]]:
     expected = {
+        "frozen_verifier_hash_matches",
         "gamma_argument_unused",
         "examples_not_unit_normalized",
         "margin_not_enforced",
