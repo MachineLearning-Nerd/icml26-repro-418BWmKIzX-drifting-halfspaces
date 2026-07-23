@@ -18,6 +18,7 @@ from lower_bound_certificates import (
     validate_claim5,
 )
 from source_contracts import CONTRACTS, PAPER
+from upper_bound_certificates import claim3_certificate, validate_claim3
 
 ROOT = Path(__file__).resolve().parents[2]
 ARTIFACT_ROOT = ROOT / ".openresearch" / "artifacts"
@@ -88,6 +89,15 @@ is substituted for this contract.
 
 
 def method_text(contract: dict) -> str:
+    if contract["claim_id"] == 3:
+        return """# Method — Claim 3
+
+This is a proof-verification certificate, not a numerical scaling fit. It
+checks the total-variation transfer, pointwise Massart excess-risk identity,
+localized VC/Bernstein deviation, ERM basic inequality, and the symbolic
+optimization of the window length. Standard empirical-process lemmas are used
+with their hypotheses recorded; algebraic closure is checked independently.
+"""
     if contract["claim_id"] == 4:
         return """# Method — Claim 4
 
@@ -123,6 +133,13 @@ No stochastic experiment is used to infer a universal asymptotic theorem.
 def limitations_text(contract: dict) -> str:
     if contract["verdict"] == "BLOCKED":
         limitation = contract["reason"]
+    elif contract["claim_id"] == 3:
+        limitation = (
+            "The certificate verifies the asymptotic theorem and its probability "
+            "level, with the same polylogarithmic suppression as the paper. It "
+            "does not infer a leading constant or implement the inefficient ERM "
+            "oracle for an arbitrary concept class."
+        )
     elif contract["claim_id"] == 5:
         limitation = (
             "This falsifies Theorem 4.1 as written because its referenced null "
@@ -159,11 +176,16 @@ def run_checker(args: list[str]) -> tuple[int, str]:
 def main() -> int:
     started = time.perf_counter()
     ARTIFACT_ROOT.mkdir(parents=True, exist_ok=True)
+    claim3_proof = claim3_certificate()
     claim4_audit = claim4_source_proof_audit()
     claim5_proof = claim5_certificate()
-    local_failures = validate_claim4(claim4_audit) + validate_claim5(claim5_proof)
+    local_failures = (
+        validate_claim3(claim3_proof)
+        + validate_claim4(claim4_audit)
+        + validate_claim5(claim5_proof)
+    )
     if local_failures:
-        print("LOWER-BOUND CERTIFICATE: FAIL")
+        print("CUMULATIVE CERTIFICATE: FAIL")
         for failure in local_failures:
             print(f"- {failure}")
         return 1
@@ -182,7 +204,7 @@ def main() -> int:
         raw = {
             "claim_id": claim_id,
             "verdict": contract["verdict"],
-            "proof_obligations_discharged": False,
+            "proof_obligations_discharged": claim_id == 3,
             "exact_contradiction": claim_id in {5, 6},
             "blocking_obligation": (
                 contract["required_evidence"]
@@ -197,6 +219,8 @@ def main() -> int:
                     "source_prior_delta_exponent": 0.5,
                 }
                 if claim_id == 6
+                else claim3_proof
+                if claim_id == 3
                 else claim5_proof
                 if claim_id == 5
                 else claim4_audit
@@ -209,6 +233,11 @@ def main() -> int:
             claim_dir / "verifier_output.txt",
             f"VERDICT={contract['verdict']}\nREASON={contract['reason']}\n",
         )
+        if claim_id == 3:
+            write(
+                claim_dir / "proof_certificate.json",
+                json.dumps(claim3_proof, indent=2, sort_keys=True) + "\n",
+            )
         if claim_id == 4:
             write(
                 claim_dir / "proof_certificate.json",
@@ -225,14 +254,17 @@ def main() -> int:
     claim6_mutant_rc, claim6_mutant_output = run_checker(
         [str(ARTIFACT_ROOT), "--mutate-claim6-source-exponent"]
     )
+    claim3_mutant_rc, claim3_mutant_output = run_checker(
+        [str(ARTIFACT_ROOT), "--mutate-claim3-window"]
+    )
     claim5_mutant_rc, claim5_mutant_output = run_checker(
         [str(ARTIFACT_ROOT), "--mutate-claim5-null-marginal"]
     )
     if normal_rc != 0:
         print(normal_output)
         return 1
-    if claim6_mutant_rc == 0 or claim5_mutant_rc == 0:
-        print("NEGATIVE CONTROL FAILED: a mutated exact contradiction was accepted")
+    if 0 in {claim3_mutant_rc, claim5_mutant_rc, claim6_mutant_rc}:
+        print("NEGATIVE CONTROL FAILED: a mutated certificate was accepted")
         return 1
 
     elapsed_s = time.perf_counter() - started
@@ -242,6 +274,9 @@ def main() -> int:
         write(claim_dir / "independent_checker_output.txt", normal_output)
         write(
             claim_dir / "negative_control_output.txt",
+            "CLAIM3_EXPECTED_NONZERO_EXIT=1\n"
+            f"CLAIM3_OBSERVED_EXIT={claim3_mutant_rc}\n"
+            f"{claim3_mutant_output}\n"
             "CLAIM5_EXPECTED_NONZERO_EXIT=1\n"
             f"CLAIM5_OBSERVED_EXIT={claim5_mutant_rc}\n"
             f"{claim5_mutant_output}\n"
@@ -284,6 +319,7 @@ def main() -> int:
         "runtime_seconds": env["runtime_seconds"],
         "verdicts": verdicts,
         "negative_control_exits": {
+            "claim_3": claim3_mutant_rc,
             "claim_5": claim5_mutant_rc,
             "claim_6": claim6_mutant_rc,
         },
@@ -298,9 +334,10 @@ def main() -> int:
             for claim_id, verdict in verdicts.items()
         )
         + "\n\n"
-        + "Exact arithmetic falsifies Theorem 4.1 as written (Claim 5), while "
-        "the source comparison retains the Claim 6 falsification. Claim 4's "
-        "source proof loses a factor d but its theorem conclusion remains BLOCKED.\n",
+        + "The localized VC/ERM certificate verifies Claim 3. The accepted "
+        "exact arithmetic falsifies Claim 5, and the source comparison retains "
+        "the Claim 6 falsification. Claim 4's source proof loses a factor d; "
+        "Claims 1, 2, and 4 remain BLOCKED.\n",
     )
 
     print(verifier_output.strip())
@@ -309,7 +346,8 @@ def main() -> int:
         print(f"CLAIM_{claim_id}_VERDICT={verdict}")
     print(
         "NEGATIVE_CONTROL_EXITS="
-        f"claim5:{claim5_mutant_rc},claim6:{claim6_mutant_rc} "
+        f"claim3:{claim3_mutant_rc},claim5:{claim5_mutant_rc},"
+        f"claim6:{claim6_mutant_rc} "
         "(expected nonzero)"
     )
     print(f"RUNTIME_SECONDS={env['runtime_seconds']}")
