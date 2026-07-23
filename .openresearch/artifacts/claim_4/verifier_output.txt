@@ -1,0 +1,2 @@
+VERDICT=VERIFIED
+REASON=An independent corrected construction discharges halfspace realizability, RCN, TV drift, an O(d/1600) mutual-information budget, generalized-Fano probability below 1/2, the Hamming-to-risk reduction, and both short and long horizons. The repair is explicitly distinguished from the paper's factor-d-defective printed proof.

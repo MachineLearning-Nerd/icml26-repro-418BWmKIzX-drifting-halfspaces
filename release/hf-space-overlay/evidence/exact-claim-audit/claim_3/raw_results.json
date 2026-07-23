@@ -1,0 +1,63 @@
+{
+  "claim_id": 3,
+  "verdict": "VERIFIED",
+  "proof_obligations_discharged": true,
+  "exact_contradiction": false,
+  "blocking_obligation": null,
+  "observations": {
+    "q_definition": "q=1-2*eta>0",
+    "algorithm": "sliding-window empirical risk minimization (DriftedERM)",
+    "window": "sqrt(d/(q*Delta)) up to logarithmic factors",
+    "window_exponents": {
+      "d": 0.5,
+      "q": -0.5,
+      "Delta": -0.5
+    },
+    "proof_obligations": {
+      "tv_telescope": {
+        "statement": "|E_t f-E_T f| <= (T-t) Delta for f in [0,1]",
+        "status": "discharged",
+        "basis": "total-variation dual characterization and triangle inequality"
+      },
+      "massart_bernstein": {
+        "statement": "R_T(h)-R_T(h_T*) >= q P_T[h(X) != h_T*(X)]",
+        "status": "discharged",
+        "basis": "pointwise conditional-risk identity under eta(x)<=eta"
+      },
+      "localized_vc_deviation": {
+        "statement": "uniform deviation <= O_tilde(sqrt(d V(h)/W)+d/W)",
+        "status": "discharged",
+        "basis": "symmetrization, the standard VC entropy bound, Dudley's sqrt(log N) integral, Talagrand/Bernstein concentration, and dyadic peeling"
+      },
+      "erm_basic_inequality": {
+        "statement": "excess <= O_tilde(d/(q W)+Delta W)",
+        "status": "discharged",
+        "basis": "ERM empirical excess <=0, localized deviation, Massart variance control, and Young's inequality"
+      },
+      "between_epoch_transfer": {
+        "statement": "adds at most 2 W Delta to excess risk",
+        "status": "discharged",
+        "basis": "TV telescope for learner risk and optimal risk"
+      }
+    },
+    "symbolic_checks": {
+      "estimation_term": "sqrt(Delta)*sqrt(d)/sqrt(q)",
+      "drift_term": "sqrt(Delta)*sqrt(d)/sqrt(q)",
+      "target_term": "sqrt(Delta)*sqrt(d)/sqrt(q)",
+      "estimation_equals_target": true,
+      "drift_equals_target": true,
+      "stated_time_lower_bound": "d/(Delta*q)",
+      "time_lower_is_window_squared": true,
+      "young_slack": "-sqrt(a)*sqrt(x) + a/2 + x/2",
+      "young_slack_is_square": true
+    },
+    "source_repairs": [
+      "Use sqrt(log N(epsilon)) in the displayed Dudley integral; the source display omits the square root but its next bound uses the correct form.",
+      "Read V(r) in the Rademacher display as H(r).",
+      "Close the missing parenthesis in the theorem's time condition."
+    ],
+    "hidden_factors": "VC entropy, confidence log(10), and peeling logarithms are exactly the factors hidden by O_tilde.",
+    "proof_obligations_discharged": true,
+    "verdict": "VERIFIED"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "git_sha": "2d3112b91d0ac9d6f0685e9229cc2fbdbbb7e4b8",
+  "command": "uv run --frozen python repro/src/verify_hs.py",
+  "runtime_seconds": 15.688122,
+  "verdicts": {
+    "1": "VERIFIED",
+    "2": "BLOCKED",
+    "3": "VERIFIED",
+    "4": "VERIFIED",
+    "5": "FALSIFIED",
+    "6": "FALSIFIED"
+  },
+  "negative_control_exits": {
+    "claim_1": 1,
+    "claim_3": 1,
+    "claim_4": 1,
+    "claim_5": 1,
+    "claim_6": 1
+  },
+  "artifact_verifier_exit": 0
+}

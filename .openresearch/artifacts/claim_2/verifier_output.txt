@@ -1,0 +1,2 @@
+VERDICT=BLOCKED
+REASON=Theorem 4.1's stated instance admits a degree-one distinguisher, so the paper's supplied hardness route is invalid. The conditional conclusion about all polynomial-time algorithms is not thereby logically falsified and remains blocked.

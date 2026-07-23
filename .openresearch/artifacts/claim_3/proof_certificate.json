@@ -1,0 +1,56 @@
+{
+  "algorithm": "sliding-window empirical risk minimization (DriftedERM)",
+  "hidden_factors": "VC entropy, confidence log(10), and peeling logarithms are exactly the factors hidden by O_tilde.",
+  "proof_obligations": {
+    "between_epoch_transfer": {
+      "basis": "TV telescope for learner risk and optimal risk",
+      "statement": "adds at most 2 W Delta to excess risk",
+      "status": "discharged"
+    },
+    "erm_basic_inequality": {
+      "basis": "ERM empirical excess <=0, localized deviation, Massart variance control, and Young's inequality",
+      "statement": "excess <= O_tilde(d/(q W)+Delta W)",
+      "status": "discharged"
+    },
+    "localized_vc_deviation": {
+      "basis": "symmetrization, the standard VC entropy bound, Dudley's sqrt(log N) integral, Talagrand/Bernstein concentration, and dyadic peeling",
+      "statement": "uniform deviation <= O_tilde(sqrt(d V(h)/W)+d/W)",
+      "status": "discharged"
+    },
+    "massart_bernstein": {
+      "basis": "pointwise conditional-risk identity under eta(x)<=eta",
+      "statement": "R_T(h)-R_T(h_T*) >= q P_T[h(X) != h_T*(X)]",
+      "status": "discharged"
+    },
+    "tv_telescope": {
+      "basis": "total-variation dual characterization and triangle inequality",
+      "statement": "|E_t f-E_T f| <= (T-t) Delta for f in [0,1]",
+      "status": "discharged"
+    }
+  },
+  "proof_obligations_discharged": true,
+  "q_definition": "q=1-2*eta>0",
+  "source_repairs": [
+    "Use sqrt(log N(epsilon)) in the displayed Dudley integral; the source display omits the square root but its next bound uses the correct form.",
+    "Read V(r) in the Rademacher display as H(r).",
+    "Close the missing parenthesis in the theorem's time condition."
+  ],
+  "symbolic_checks": {
+    "drift_equals_target": true,
+    "drift_term": "sqrt(Delta)*sqrt(d)/sqrt(q)",
+    "estimation_equals_target": true,
+    "estimation_term": "sqrt(Delta)*sqrt(d)/sqrt(q)",
+    "stated_time_lower_bound": "d/(Delta*q)",
+    "target_term": "sqrt(Delta)*sqrt(d)/sqrt(q)",
+    "time_lower_is_window_squared": true,
+    "young_slack": "-sqrt(a)*sqrt(x) + a/2 + x/2",
+    "young_slack_is_square": true
+  },
+  "verdict": "VERIFIED",
+  "window": "sqrt(d/(q*Delta)) up to logarithmic factors",
+  "window_exponents": {
+    "Delta": -0.5,
+    "d": 0.5,
+    "q": -0.5
+  }
+}

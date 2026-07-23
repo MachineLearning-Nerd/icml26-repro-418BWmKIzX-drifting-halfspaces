@@ -1,0 +1,26 @@
+CLAIM1_EXPECTED_NONZERO_EXIT=1
+CLAIM1_OBSERVED_EXIT=1
+INDEPENDENT CHECK: FAIL
+- claim 1: epoch does not balance the error terms
+
+CLAIM3_EXPECTED_NONZERO_EXIT=1
+CLAIM3_OBSERVED_EXIT=1
+INDEPENDENT CHECK: FAIL
+- claim 3: incorrect balancing window
+
+CLAIM4_EXPECTED_NONZERO_EXIT=1
+CLAIM4_OBSERVED_EXIT=1
+INDEPENDENT CHECK: FAIL
+- claim 4: information budget is too large
+
+CLAIM5_EXPECTED_NONZERO_EXIT=1
+CLAIM5_OBSERVED_EXIT=1
+INDEPENDENT CHECK: FAIL
+- claim 5: Definition 4.1 null is not eta
+- claim 5: degree-one test is not a 1-distinguisher
+
+CLAIM6_EXPECTED_NONZERO_EXIT=1
+CLAIM6_OBSERVED_EXIT=1
+INDEPENDENT CHECK: FAIL
+- claim 6: source exponent is not 1/2
+- claim 6: expected source/import mismatch disappeared

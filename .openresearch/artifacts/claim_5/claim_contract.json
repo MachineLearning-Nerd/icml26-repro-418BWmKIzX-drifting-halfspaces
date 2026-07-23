@@ -1,0 +1,30 @@
+{
+  "anchor": "S4.Thmtheorem1",
+  "assumptions": [
+    "Definition 4.3 is a valid instance of Definition 4.1",
+    "gamma = Theta(1/d), d odd, and gamma < 1/log(1/Delta)"
+  ],
+  "claim_id": 5,
+  "conclusion": {
+    "forbidden_degree": "O(gamma^(-c/4))",
+    "gamma_degree_exponent": -0.25
+  },
+  "domain": "the trajectory test of Definition 4.1 with the hard instance of Definition 4.3",
+  "paper": {
+    "html_sha256": "6b04e5b5b624ce99606d018a6dcfd2278d1448b36e555b0b7ce41c95105e1240",
+    "html_url": "https://ar5iv.labs.arxiv.org/html/2606.11149",
+    "paper_id": "2606.11149v1",
+    "retrieved_at_utc": "2026-07-23T13:09:55Z",
+    "source_sha256": "9679e85743076e711da671b3a875182173441e5f6ecb41e7e56d3d36647e9221",
+    "source_url": "https://export.arxiv.org/e-print/2606.11149"
+  },
+  "quantifiers": [
+    "for fixed c in (0,1/2)",
+    "for eta = 1/3 and Delta > 2^(-1/gamma^c)",
+    "no polynomial below the stated degree is a 1-distinguisher"
+  ],
+  "reason": "Definition 4.1 has null P(y=+1)=eta, while Definition 4.3 uses P(y=+1)=1-eta under both its stated null and alternatives. At eta=1/3, p(z)=sum_i y_i is already a degree-one 1-distinguisher for every T>=2.",
+  "required_evidence": "exact likelihood-ratio projection and correlation-bound certificate",
+  "theorem": "4.1",
+  "verdict": "FALSIFIED"
+}

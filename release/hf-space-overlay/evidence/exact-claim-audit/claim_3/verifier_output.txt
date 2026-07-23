@@ -1,0 +1,2 @@
+VERDICT=VERIFIED
+REASON=A fail-closed proof certificate discharges TV transfer, the Massart Bernstein condition, localized VC deviation, the ERM basic inequality, and the exact W=sqrt(d/((1-2eta)Delta)) optimization. It explicitly repairs three source-notation defects without changing the argument.
