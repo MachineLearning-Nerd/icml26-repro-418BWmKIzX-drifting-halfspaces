@@ -1,0 +1,31 @@
+{
+  "paper_id": "2606.11149v1",
+  "title": "Efficiently Learning Drifting Halfspaces with Massart Noise",
+  "retrieved_at_utc": "2026-07-23T13:09:55Z",
+  "html": {
+    "url": "https://ar5iv.labs.arxiv.org/html/2606.11149",
+    "user_agent": "OpenResearch-Reproduction/1.0 (paper audit; contact via repository)",
+    "sha256": "6b04e5b5b624ce99606d018a6dcfd2278d1448b36e555b0b7ce41c95105e1240"
+  },
+  "source_archive": {
+    "url": "https://export.arxiv.org/e-print/2606.11149",
+    "user_agent": "OpenResearch-Reproduction/1.0 (source audit; contact via repository)",
+    "sha256": "9679e85743076e711da671b3a875182173441e5f6ecb41e7e56d3d36647e9221"
+  },
+  "anchors": {
+    "claim_1": "#S1.Thmtheorem1",
+    "claim_2": "#S1.Thmtheorem2",
+    "claim_3": "#S2.Thmtheorem1",
+    "claim_4": "#S2.Thmtheorem2",
+    "claim_5": "#S4.Thmtheorem1",
+    "claim_6": "#S3.Thmtheorem2"
+  },
+  "exact_contract_summary": {
+    "claim_1": "For drifting gamma-margin halfspaces with eta-Massart noise, there exists a poly(d,1/gamma,1/Delta)-time algorithm; for any T=Omega_tilde(Delta^(-2/3)), with probability at least 9/10 its error is at most eta+O_tilde(Delta^(1/3)/gamma).",
+    "claim_2": "For (1/3)-RCN and T >= gamma^(-1/6) Delta^(-2/3), there exists a family of instances such that, conditional on the low-degree hardness conjecture, no polynomial-time algorithm attains error opt_T+Delta^(1/3) gamma^(-1/6) on every instance.",
+    "claim_3": "For every drifting binary concept process realized by a VC-dimension-d class under eta-Massart noise, for every sufficiently late t=Omega_tilde(d/((1-2eta)Delta)), an algorithm has error at most opt_t+O_tilde(sqrt(d Delta/(1-2eta))) with probability at least 9/10.",
+    "claim_4": "For every T>0 and Delta in (0,1), there exists a family of eta-RCN halfspace instances such that, when (1-2eta)^3>d Delta, no algorithm attains err_T <= opt_T+o(sqrt(d Delta/(1-2eta))) with probability 1/2 on every instance.",
+    "claim_5": "For fixed c in (0,1/2), eta=1/3, and Delta>2^(-1/gamma^c), no polynomial of degree less than O(gamma^(-c/4)) is a 1-distinguisher for Definition 4.1 instantiated by Definition 4.3.",
+    "claim_6": "The paper states sqrt(Delta), not Delta: for T=Omega_tilde((gamma Delta)^(-1/2)), an efficient algorithm has err_T=O_tilde(sqrt(Delta) gamma^(-3/2)) with probability at least 9/10; the compared prior rate is O_tilde(sqrt(Delta) gamma^(-2))."
+  }
+}

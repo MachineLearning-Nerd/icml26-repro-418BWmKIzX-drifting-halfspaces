@@ -1,0 +1,8 @@
+{
+  "claim_id": 2,
+  "verdict": "BLOCKED",
+  "proof_obligations_discharged": false,
+  "exact_contradiction": false,
+  "blocking_obligation": "valid Theorem 4.1 certificate plus a valid testing-to-learning reduction",
+  "observations": {}
+}

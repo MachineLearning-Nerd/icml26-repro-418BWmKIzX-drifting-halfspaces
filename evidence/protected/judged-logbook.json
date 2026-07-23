@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "title": "Repro - Efficiently Learning Drifting Halfspaces with Massart Noise",
+  "emoji": "🎯",
+  "space_id": "DineshAI/418BWmKIzX",
+  "paper": null,
+  "tags": [
+    "icml2026-repro",
+    "paper-418BWmKIzX"
+  ],
+  "updated_at": "2026-07-23T08:23:02+00:00",
+  "root": {
+    "slug": "index",
+    "title": "Repro - Efficiently Learning Drifting Halfspaces with Massart Noise",
+    "file": "pages/index.md",
+    "children": [
+      {
+        "slug": "overview",
+        "title": "Overview",
+        "file": "pages/overview/page.md",
+        "children": []
+      },
+      {
+        "slug": "claims",
+        "title": "Claims",
+        "file": "pages/claims/page.md",
+        "children": []
+      },
+      {
+        "slug": "evidence",
+        "title": "Evidence",
+        "file": "pages/evidence/page.md",
+        "children": []
+      },
+      {
+        "slug": "verification-run",
+        "title": "Verification run",
+        "file": "pages/verification-run/page.md",
+        "children": []
+      },
+      {
+        "slug": "conclusion",
+        "title": "Conclusion",
+        "file": "pages/conclusion/page.md",
+        "children": []
+      }
+    ]
+  },
+  "agent_view_tokens": 1568,
+  "revision": "1784794982171334120"
+}
