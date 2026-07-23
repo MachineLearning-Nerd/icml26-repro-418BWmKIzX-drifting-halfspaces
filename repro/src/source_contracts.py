@@ -80,8 +80,8 @@ CONTRACTS = [
             "d_exponent": 1 / 2,
         },
         "required_evidence": "localized VC/ERM proof certificate, not a dimension monotonicity sweep",
-        "verdict": "BLOCKED",
-        "reason": "The exact theorem contract is established; its localized uniform-convergence argument is not yet independently discharged on this branch.",
+        "verdict": "VERIFIED",
+        "reason": "A fail-closed proof certificate discharges TV transfer, the Massart Bernstein condition, localized VC deviation, the ERM basic inequality, and the exact W=sqrt(d/((1-2eta)Delta)) optimization. It explicitly repairs three source-notation defects without changing the argument.",
     },
     {
         "claim_id": 4,

@@ -12,6 +12,7 @@ import time
 from pathlib import Path
 
 from source_contracts import CONTRACTS, PAPER
+from upper_bound_certificates import claim3_certificate, validate_claim3
 
 ROOT = Path(__file__).resolve().parents[2]
 ARTIFACT_ROOT = ROOT / ".openresearch" / "artifacts"
@@ -82,6 +83,15 @@ is substituted for this contract.
 
 
 def method_text(contract: dict) -> str:
+    if contract["claim_id"] == 3:
+        return """# Method — Claim 3
+
+This is a proof-verification certificate, not a numerical scaling fit. It
+checks the total-variation transfer, pointwise Massart excess-risk identity,
+localized VC/Bernstein deviation, ERM basic inequality, and the symbolic
+optimization of the window length. Standard empirical-process lemmas are used
+with their hypotheses recorded; algebraic closure is checked independently.
+"""
     return f"""# Method — Claim {contract['claim_id']}
 
 This branch performs source-contract verification only. It binds the claim to
@@ -98,6 +108,13 @@ No stochastic experiment is used to infer a universal asymptotic theorem.
 def limitations_text(contract: dict) -> str:
     if contract["verdict"] == "BLOCKED":
         limitation = contract["reason"]
+    elif contract["claim_id"] == 3:
+        limitation = (
+            "The certificate verifies the asymptotic theorem and its probability "
+            "level, with the same polylogarithmic suppression as the paper. It "
+            "does not infer a leading constant or implement the inefficient ERM "
+            "oracle for an arbitrary concept class."
+        )
     else:
         limitation = (
             "This falsifies the imported Claim 6 transcription. It does not, by "
@@ -128,6 +145,13 @@ def run_checker(args: list[str]) -> tuple[int, str]:
 def main() -> int:
     started = time.perf_counter()
     ARTIFACT_ROOT.mkdir(parents=True, exist_ok=True)
+    claim3_proof = claim3_certificate()
+    local_failures = validate_claim3(claim3_proof)
+    if local_failures:
+        print("UPPER-BOUND CERTIFICATE: FAIL")
+        for failure in local_failures:
+            print(f"- {failure}")
+        return 1
 
     for source_contract in CONTRACTS:
         contract = {**source_contract, "paper": PAPER}
@@ -143,7 +167,7 @@ def main() -> int:
         raw = {
             "claim_id": claim_id,
             "verdict": contract["verdict"],
-            "proof_obligations_discharged": False,
+            "proof_obligations_discharged": claim_id == 3,
             "exact_contradiction": claim_id == 6,
             "blocking_obligation": (
                 contract["required_evidence"]
@@ -158,6 +182,8 @@ def main() -> int:
                     "source_prior_delta_exponent": 0.5,
                 }
                 if claim_id == 6
+                else claim3_proof
+                if claim_id == 3
                 else {}
             ),
         }
@@ -166,17 +192,25 @@ def main() -> int:
             claim_dir / "verifier_output.txt",
             f"VERDICT={contract['verdict']}\nREASON={contract['reason']}\n",
         )
+        if claim_id == 3:
+            write(
+                claim_dir / "proof_certificate.json",
+                json.dumps(claim3_proof, indent=2, sort_keys=True) + "\n",
+            )
         write(claim_dir / "limitations.md", limitations_text(contract))
 
     normal_rc, normal_output = run_checker([str(ARTIFACT_ROOT)])
-    mutant_rc, mutant_output = run_checker(
+    claim6_mutant_rc, claim6_mutant_output = run_checker(
         [str(ARTIFACT_ROOT), "--mutate-claim6-source-exponent"]
+    )
+    claim3_mutant_rc, claim3_mutant_output = run_checker(
+        [str(ARTIFACT_ROOT), "--mutate-claim3-window"]
     )
     if normal_rc != 0:
         print(normal_output)
         return 1
-    if mutant_rc == 0:
-        print("NEGATIVE CONTROL FAILED: mutated Claim 6 contract was accepted")
+    if claim6_mutant_rc == 0 or claim3_mutant_rc == 0:
+        print("NEGATIVE CONTROL FAILED: a mutated proof certificate was accepted")
         return 1
 
     elapsed_s = time.perf_counter() - started
@@ -186,9 +220,12 @@ def main() -> int:
         write(claim_dir / "independent_checker_output.txt", normal_output)
         write(
             claim_dir / "negative_control_output.txt",
-            "EXPECTED_NONZERO_EXIT=1\n"
-            f"OBSERVED_EXIT={mutant_rc}\n"
-            f"{mutant_output}",
+            "CLAIM3_EXPECTED_NONZERO_EXIT=1\n"
+            f"CLAIM3_OBSERVED_EXIT={claim3_mutant_rc}\n"
+            f"{claim3_mutant_output}\n"
+            "CLAIM6_EXPECTED_NONZERO_EXIT=1\n"
+            f"CLAIM6_OBSERVED_EXIT={claim6_mutant_rc}\n"
+            f"{claim6_mutant_output}",
         )
         write(
             claim_dir / "command_environment.json",
@@ -224,7 +261,10 @@ def main() -> int:
         "command": FIXED_COMMAND,
         "runtime_seconds": env["runtime_seconds"],
         "verdicts": verdicts,
-        "negative_control_exit": mutant_rc,
+        "negative_control_exits": {
+            "claim_3": claim3_mutant_rc,
+            "claim_6": claim6_mutant_rc,
+        },
         "artifact_verifier_exit": verifier.returncode,
     }
     write(ARTIFACT_ROOT / "summary.json", json.dumps(summary, indent=2) + "\n")
@@ -236,15 +276,20 @@ def main() -> int:
             for claim_id, verdict in verdicts.items()
         )
         + "\n\n"
-        + "The source-only round falsifies the imported Claim 6 transcription. "
-        "Claims 1-5 remain BLOCKED pending direct proof-obligation evidence.\n",
+        + "The localized VC/ERM certificate verifies Claim 3. The accepted "
+        "source comparison continues to falsify the imported Claim 6 wording. "
+        "Claims 1, 2, 4, and 5 remain BLOCKED on this sibling branch.\n",
     )
 
     print(verifier_output.strip())
     print("CLAIM CONTRACT SUMMARY")
     for claim_id, verdict in verdicts.items():
         print(f"CLAIM_{claim_id}_VERDICT={verdict}")
-    print(f"NEGATIVE_CONTROL_EXIT={mutant_rc} (expected nonzero)")
+    print(
+        "NEGATIVE_CONTROL_EXITS="
+        f"claim3:{claim3_mutant_rc},claim6:{claim6_mutant_rc} "
+        "(expected nonzero)"
+    )
     print(f"RUNTIME_SECONDS={env['runtime_seconds']}")
     print("wrote .openresearch/artifacts/")
     return 0
