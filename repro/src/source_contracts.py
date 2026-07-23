@@ -100,8 +100,8 @@ CONTRACTS = [
             "d_exponent": 1 / 2,
         },
         "required_evidence": "information-theoretic lower-bound construction and testing reduction",
-        "verdict": "BLOCKED",
-        "reason": "The displayed threshold in the source proof loses a factor d and yields only sqrt(Delta/(d(1-2eta))) at its endpoint. A corrected construction may prove the theorem, but that repair is a source deviation and the probability quantifier remains to be discharged.",
+        "verdict": "VERIFIED",
+        "reason": "An independent corrected construction discharges halfspace realizability, RCN, TV drift, an O(d/1600) mutual-information budget, generalized-Fano probability below 1/2, the Hamming-to-risk reduction, and both short and long horizons. The repair is explicitly distinguished from the paper's factor-d-defective printed proof.",
     },
     {
         "claim_id": 5,

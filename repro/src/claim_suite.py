@@ -12,9 +12,9 @@ import time
 from pathlib import Path
 
 from lower_bound_certificates import (
-    claim4_source_proof_audit,
+    claim4_corrected_certificate,
     claim5_certificate,
-    validate_claim4,
+    validate_claim4_corrected,
     validate_claim5,
 )
 from source_contracts import CONTRACTS, PAPER
@@ -101,11 +101,12 @@ with their hypotheses recorded; algebraic closure is checked independently.
     if contract["claim_id"] == 4:
         return """# Method — Claim 4
 
-We substitute the source's displayed threshold into its own construction using
-exact symbolic algebra. The endpoint excess-error scale is compared with the
-theorem scale before any numerical approximation. The audit deliberately does
-not call a repair a verification: removing the extra factor `d` from the
-threshold would change the source construction.
+This is an independent repaired lower-bound proof, not a validation of the
+paper's printed construction. It removes the erroneous extra factor `d` from
+the moving threshold, proves the joint-TV drift contract under RCN, bounds
+mutual information by `d/1600`, applies generalized Fano at Hamming radius
+`d/4`, and reduces Hamming error to final RCN excess risk. Separate static and
+drifting constructions cover short and long horizons.
 """
     if contract["claim_id"] == 5:
         return """# Method — Claim 5
@@ -139,6 +140,12 @@ def limitations_text(contract: dict) -> str:
             "level, with the same polylogarithmic suppression as the paper. It "
             "does not infer a leading constant or implement the inefficient ERM "
             "oracle for an arbitrary concept class."
+        )
+    elif contract["claim_id"] == 4:
+        limitation = (
+            "The theorem is verified under its standard asymptotic little-o "
+            "interpretation. The independent construction repairs the source's "
+            "factor-d threshold error; it does not certify the printed proof."
         )
     elif contract["claim_id"] == 5:
         limitation = (
@@ -177,11 +184,11 @@ def main() -> int:
     started = time.perf_counter()
     ARTIFACT_ROOT.mkdir(parents=True, exist_ok=True)
     claim3_proof = claim3_certificate()
-    claim4_audit = claim4_source_proof_audit()
+    claim4_proof = claim4_corrected_certificate()
     claim5_proof = claim5_certificate()
     local_failures = (
         validate_claim3(claim3_proof)
-        + validate_claim4(claim4_audit)
+        + validate_claim4_corrected(claim4_proof)
         + validate_claim5(claim5_proof)
     )
     if local_failures:
@@ -204,7 +211,7 @@ def main() -> int:
         raw = {
             "claim_id": claim_id,
             "verdict": contract["verdict"],
-            "proof_obligations_discharged": claim_id == 3,
+            "proof_obligations_discharged": claim_id in {3, 4},
             "exact_contradiction": claim_id in {5, 6},
             "blocking_obligation": (
                 contract["required_evidence"]
@@ -223,7 +230,7 @@ def main() -> int:
                 if claim_id == 3
                 else claim5_proof
                 if claim_id == 5
-                else claim4_audit
+                else claim4_proof
                 if claim_id == 4
                 else {}
             ),
@@ -241,7 +248,7 @@ def main() -> int:
         if claim_id == 4:
             write(
                 claim_dir / "proof_certificate.json",
-                json.dumps(claim4_audit, indent=2, sort_keys=True) + "\n",
+                json.dumps(claim4_proof, indent=2, sort_keys=True) + "\n",
             )
         if claim_id == 5:
             write(
@@ -260,10 +267,18 @@ def main() -> int:
     claim5_mutant_rc, claim5_mutant_output = run_checker(
         [str(ARTIFACT_ROOT), "--mutate-claim5-null-marginal"]
     )
+    claim4_mutant_rc, claim4_mutant_output = run_checker(
+        [str(ARTIFACT_ROOT), "--mutate-claim4-information-budget"]
+    )
     if normal_rc != 0:
         print(normal_output)
         return 1
-    if 0 in {claim3_mutant_rc, claim5_mutant_rc, claim6_mutant_rc}:
+    if 0 in {
+        claim3_mutant_rc,
+        claim4_mutant_rc,
+        claim5_mutant_rc,
+        claim6_mutant_rc,
+    }:
         print("NEGATIVE CONTROL FAILED: a mutated certificate was accepted")
         return 1
 
@@ -277,6 +292,9 @@ def main() -> int:
             "CLAIM3_EXPECTED_NONZERO_EXIT=1\n"
             f"CLAIM3_OBSERVED_EXIT={claim3_mutant_rc}\n"
             f"{claim3_mutant_output}\n"
+            "CLAIM4_EXPECTED_NONZERO_EXIT=1\n"
+            f"CLAIM4_OBSERVED_EXIT={claim4_mutant_rc}\n"
+            f"{claim4_mutant_output}\n"
             "CLAIM5_EXPECTED_NONZERO_EXIT=1\n"
             f"CLAIM5_OBSERVED_EXIT={claim5_mutant_rc}\n"
             f"{claim5_mutant_output}\n"
@@ -320,6 +338,7 @@ def main() -> int:
         "verdicts": verdicts,
         "negative_control_exits": {
             "claim_3": claim3_mutant_rc,
+            "claim_4": claim4_mutant_rc,
             "claim_5": claim5_mutant_rc,
             "claim_6": claim6_mutant_rc,
         },
@@ -334,10 +353,10 @@ def main() -> int:
             for claim_id, verdict in verdicts.items()
         )
         + "\n\n"
-        + "The localized VC/ERM certificate verifies Claim 3. The accepted "
-        "exact arithmetic falsifies Claim 5, and the source comparison retains "
-        "the Claim 6 falsification. Claim 4's source proof loses a factor d; "
-        "Claims 1, 2, and 4 remain BLOCKED.\n",
+        + "The localized VC/ERM certificate verifies Claim 3, and an independent "
+        "corrected RCN construction verifies Claim 4. Exact arithmetic falsifies "
+        "Claim 5, while the source comparison retains Claim 6's falsification. "
+        "Claims 1 and 2 remain BLOCKED.\n",
     )
 
     print(verifier_output.strip())
@@ -346,7 +365,8 @@ def main() -> int:
         print(f"CLAIM_{claim_id}_VERDICT={verdict}")
     print(
         "NEGATIVE_CONTROL_EXITS="
-        f"claim3:{claim3_mutant_rc},claim5:{claim5_mutant_rc},"
+        f"claim3:{claim3_mutant_rc},claim4:{claim4_mutant_rc},"
+        f"claim5:{claim5_mutant_rc},"
         f"claim6:{claim6_mutant_rc} "
         "(expected nonzero)"
     )

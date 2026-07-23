@@ -26,6 +26,7 @@ def main() -> int:
     parser.add_argument("--mutate-claim6-source-exponent", action="store_true")
     parser.add_argument("--mutate-claim5-null-marginal", action="store_true")
     parser.add_argument("--mutate-claim3-window", action="store_true")
+    parser.add_argument("--mutate-claim4-information-budget", action="store_true")
     args = parser.parse_args()
 
     failures: list[str] = []
@@ -76,6 +77,29 @@ def main() -> int:
                 failures.append("claim 3: an obligation is not discharged")
             if contract["verdict"] != "VERIFIED":
                 failures.append("claim 3: completed proof must yield VERIFIED")
+        if claim_id == 4:
+            raw = json.loads(
+                (args.artifact_root / "claim_4" / "raw_results.json").read_text()
+            )
+            proof = raw["observations"]
+            budget = proof["symbolic_checks"]["certified_information_budget"]
+            if args.mutate_claim4_information_budget:
+                budget = "d"
+            if budget != "d/1600":
+                failures.append("claim 4: information budget is too large")
+            if not proof["symbolic_checks"]["static_information_equals_d_over_6400"]:
+                failures.append("claim 4: static information algebra failed")
+            if not proof["symbolic_checks"]["excess_is_target_over_640"]:
+                failures.append("claim 4: Hamming-to-risk algebra failed")
+            if not proof["symbolic_checks"]["d40_success_is_below_half"]:
+                failures.append("claim 4: Fano success bound is not below 1/2")
+            if not all(
+                item["status"] == "discharged"
+                for item in proof["proof_obligations"].values()
+            ):
+                failures.append("claim 4: an obligation is not discharged")
+            if contract["verdict"] != "VERIFIED":
+                failures.append("claim 4: completed proof must yield VERIFIED")
         if claim_id == 5:
             raw = json.loads(
                 (args.artifact_root / "claim_5" / "raw_results.json").read_text()
@@ -113,7 +137,7 @@ def main() -> int:
         return 1
     print("INDEPENDENT CHECK: OK")
     print(
-        "All source hashes, theorem anchors, verdict tokens, Claim 3 proof "
+        "All source hashes, theorem anchors, verdict tokens, Claim 3/4 proof "
         "algebra, and exact Claim 5/6 contradictions agree."
     )
     return 0
