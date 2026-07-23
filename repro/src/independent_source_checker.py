@@ -26,6 +26,7 @@ def main() -> int:
     parser.add_argument("--mutate-claim6-source-exponent", action="store_true")
     parser.add_argument("--mutate-claim5-null-marginal", action="store_true")
     parser.add_argument("--mutate-claim3-window", action="store_true")
+    parser.add_argument("--mutate-claim1-epoch-exponent", action="store_true")
     args = parser.parse_args()
 
     failures: list[str] = []
@@ -52,6 +53,27 @@ def main() -> int:
                 failures.append("claim 6: expected source/import mismatch disappeared")
             if contract["verdict"] != "FALSIFIED":
                 failures.append("claim 6: mismatch must yield FALSIFIED")
+        if claim_id == 1:
+            raw = json.loads(
+                (args.artifact_root / "claim_1" / "raw_results.json").read_text()
+            )
+            proof = raw["observations"]
+            epoch_exponent = proof["symbolic_checks"]["epoch_delta_exponent"]
+            if args.mutate_claim1_epoch_exponent:
+                epoch_exponent = -1 / 2
+            if epoch_exponent != -2 / 3:
+                failures.append("claim 1: epoch does not balance the error terms")
+            if proof["symbolic_checks"]["error_delta_exponent"] != 1 / 3:
+                failures.append("claim 1: Delta error exponent changed")
+            if proof["symbolic_checks"]["error_gamma_exponent"] != -1:
+                failures.append("claim 1: gamma error exponent changed")
+            if not all(
+                item["status"] == "discharged"
+                for item in proof["proof_obligations"].values()
+            ):
+                failures.append("claim 1: an obligation is not discharged")
+            if contract["verdict"] != "VERIFIED":
+                failures.append("claim 1: completed proof must yield VERIFIED")
         if claim_id == 3:
             raw = json.loads(
                 (args.artifact_root / "claim_3" / "raw_results.json").read_text()
@@ -113,7 +135,7 @@ def main() -> int:
         return 1
     print("INDEPENDENT CHECK: OK")
     print(
-        "All source hashes, theorem anchors, verdict tokens, Claim 3 proof "
+        "All source hashes, theorem anchors, verdict tokens, Claim 1/3 proof "
         "algebra, and exact Claim 5/6 contradictions agree."
     )
     return 0

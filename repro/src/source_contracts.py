@@ -33,8 +33,8 @@ CONTRACTS = [
             "gamma_exponent": -1,
         },
         "required_evidence": "proof-obligation audit of Algorithms 1-2 and every theorem dependency",
-        "verdict": "BLOCKED",
-        "reason": "The exact source contract is established; the proof obligations are not yet independently discharged on this branch.",
+        "verdict": "VERIFIED",
+        "reason": "A fail-closed proof certificate discharges the gradient bound, projected regret, regret-to-error TV lemma, independent iterate selection, all eligible times, runtime, and 9/10 success probability. It explicitly repairs four source pseudocode/notation defects without changing the algorithm or rate.",
     },
     {
         "claim_id": 2,
