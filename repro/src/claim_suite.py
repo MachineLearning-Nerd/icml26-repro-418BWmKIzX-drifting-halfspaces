@@ -11,6 +11,12 @@ import sys
 import time
 from pathlib import Path
 
+from lower_bound_certificates import (
+    claim4_source_proof_audit,
+    claim5_certificate,
+    validate_claim4,
+    validate_claim5,
+)
 from source_contracts import CONTRACTS, PAPER
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -82,6 +88,25 @@ is substituted for this contract.
 
 
 def method_text(contract: dict) -> str:
+    if contract["claim_id"] == 4:
+        return """# Method — Claim 4
+
+We substitute the source's displayed threshold into its own construction using
+exact symbolic algebra. The endpoint excess-error scale is compared with the
+theorem scale before any numerical approximation. The audit deliberately does
+not call a repair a verification: removing the extra factor `d` from the
+threshold would change the source construction.
+"""
+    if contract["claim_id"] == 5:
+        return """# Method — Claim 5
+
+We evaluate the degree-one polynomial `p(z)=sum_i y_i` under the exact null
+marginal in Definition 4.1 and the exact label marginal imposed by Definition
+4.3. All calculations use rational arithmetic. At `eta=1/3` and `T=2`, its
+squared standardized expectation gap is exactly one, so it meets Definition
+4.2's threshold for a 1-distinguisher. The certificate also derives the
+alternative label marginal from the stated conditional flip rate.
+"""
     return f"""# Method — Claim {contract['claim_id']}
 
 This branch performs source-contract verification only. It binds the claim to
@@ -98,6 +123,12 @@ No stochastic experiment is used to infer a universal asymptotic theorem.
 def limitations_text(contract: dict) -> str:
     if contract["verdict"] == "BLOCKED":
         limitation = contract["reason"]
+    elif contract["claim_id"] == 5:
+        limitation = (
+            "This falsifies Theorem 4.1 as written because its referenced null "
+            "and hard-instance marginals are inconsistent and admit a degree-one "
+            "distinguisher. It does not rule out a corrected low-degree theorem."
+        )
     else:
         limitation = (
             "This falsifies the imported Claim 6 transcription. It does not, by "
@@ -128,6 +159,14 @@ def run_checker(args: list[str]) -> tuple[int, str]:
 def main() -> int:
     started = time.perf_counter()
     ARTIFACT_ROOT.mkdir(parents=True, exist_ok=True)
+    claim4_audit = claim4_source_proof_audit()
+    claim5_proof = claim5_certificate()
+    local_failures = validate_claim4(claim4_audit) + validate_claim5(claim5_proof)
+    if local_failures:
+        print("LOWER-BOUND CERTIFICATE: FAIL")
+        for failure in local_failures:
+            print(f"- {failure}")
+        return 1
 
     for source_contract in CONTRACTS:
         contract = {**source_contract, "paper": PAPER}
@@ -144,7 +183,7 @@ def main() -> int:
             "claim_id": claim_id,
             "verdict": contract["verdict"],
             "proof_obligations_discharged": False,
-            "exact_contradiction": claim_id == 6,
+            "exact_contradiction": claim_id in {5, 6},
             "blocking_obligation": (
                 contract["required_evidence"]
                 if contract["verdict"] == "BLOCKED"
@@ -158,6 +197,10 @@ def main() -> int:
                     "source_prior_delta_exponent": 0.5,
                 }
                 if claim_id == 6
+                else claim5_proof
+                if claim_id == 5
+                else claim4_audit
+                if claim_id == 4
                 else {}
             ),
         }
@@ -166,17 +209,30 @@ def main() -> int:
             claim_dir / "verifier_output.txt",
             f"VERDICT={contract['verdict']}\nREASON={contract['reason']}\n",
         )
+        if claim_id == 4:
+            write(
+                claim_dir / "proof_certificate.json",
+                json.dumps(claim4_audit, indent=2, sort_keys=True) + "\n",
+            )
+        if claim_id == 5:
+            write(
+                claim_dir / "proof_certificate.json",
+                json.dumps(claim5_proof, indent=2, sort_keys=True) + "\n",
+            )
         write(claim_dir / "limitations.md", limitations_text(contract))
 
     normal_rc, normal_output = run_checker([str(ARTIFACT_ROOT)])
-    mutant_rc, mutant_output = run_checker(
+    claim6_mutant_rc, claim6_mutant_output = run_checker(
         [str(ARTIFACT_ROOT), "--mutate-claim6-source-exponent"]
+    )
+    claim5_mutant_rc, claim5_mutant_output = run_checker(
+        [str(ARTIFACT_ROOT), "--mutate-claim5-null-marginal"]
     )
     if normal_rc != 0:
         print(normal_output)
         return 1
-    if mutant_rc == 0:
-        print("NEGATIVE CONTROL FAILED: mutated Claim 6 contract was accepted")
+    if claim6_mutant_rc == 0 or claim5_mutant_rc == 0:
+        print("NEGATIVE CONTROL FAILED: a mutated exact contradiction was accepted")
         return 1
 
     elapsed_s = time.perf_counter() - started
@@ -186,9 +242,12 @@ def main() -> int:
         write(claim_dir / "independent_checker_output.txt", normal_output)
         write(
             claim_dir / "negative_control_output.txt",
-            "EXPECTED_NONZERO_EXIT=1\n"
-            f"OBSERVED_EXIT={mutant_rc}\n"
-            f"{mutant_output}",
+            "CLAIM5_EXPECTED_NONZERO_EXIT=1\n"
+            f"CLAIM5_OBSERVED_EXIT={claim5_mutant_rc}\n"
+            f"{claim5_mutant_output}\n"
+            "CLAIM6_EXPECTED_NONZERO_EXIT=1\n"
+            f"CLAIM6_OBSERVED_EXIT={claim6_mutant_rc}\n"
+            f"{claim6_mutant_output}",
         )
         write(
             claim_dir / "command_environment.json",
@@ -224,7 +283,10 @@ def main() -> int:
         "command": FIXED_COMMAND,
         "runtime_seconds": env["runtime_seconds"],
         "verdicts": verdicts,
-        "negative_control_exit": mutant_rc,
+        "negative_control_exits": {
+            "claim_5": claim5_mutant_rc,
+            "claim_6": claim6_mutant_rc,
+        },
         "artifact_verifier_exit": verifier.returncode,
     }
     write(ARTIFACT_ROOT / "summary.json", json.dumps(summary, indent=2) + "\n")
@@ -236,15 +298,20 @@ def main() -> int:
             for claim_id, verdict in verdicts.items()
         )
         + "\n\n"
-        + "The source-only round falsifies the imported Claim 6 transcription. "
-        "Claims 1-5 remain BLOCKED pending direct proof-obligation evidence.\n",
+        + "Exact arithmetic falsifies Theorem 4.1 as written (Claim 5), while "
+        "the source comparison retains the Claim 6 falsification. Claim 4's "
+        "source proof loses a factor d but its theorem conclusion remains BLOCKED.\n",
     )
 
     print(verifier_output.strip())
     print("CLAIM CONTRACT SUMMARY")
     for claim_id, verdict in verdicts.items():
         print(f"CLAIM_{claim_id}_VERDICT={verdict}")
-    print(f"NEGATIVE_CONTROL_EXIT={mutant_rc} (expected nonzero)")
+    print(
+        "NEGATIVE_CONTROL_EXITS="
+        f"claim5:{claim5_mutant_rc},claim6:{claim6_mutant_rc} "
+        "(expected nonzero)"
+    )
     print(f"RUNTIME_SECONDS={env['runtime_seconds']}")
     print("wrote .openresearch/artifacts/")
     return 0

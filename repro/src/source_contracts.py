@@ -57,7 +57,7 @@ CONTRACTS = [
         },
         "required_evidence": "valid Theorem 4.1 certificate plus a valid testing-to-learning reduction",
         "verdict": "BLOCKED",
-        "reason": "A monotonic error trend cannot test a conditional hardness theorem; the low-degree construction and reduction require independent audit.",
+        "reason": "Theorem 4.1's stated instance admits a degree-one distinguisher, so the paper's supplied hardness route is invalid. The conditional conclusion about all polynomial-time algorithms is not thereby logically falsified and remains blocked.",
     },
     {
         "claim_id": 3,
@@ -101,7 +101,7 @@ CONTRACTS = [
         },
         "required_evidence": "information-theoretic lower-bound construction and testing reduction",
         "verdict": "BLOCKED",
-        "reason": "The old noise-floor check did not instantiate RCN or the quantified lower bound; the construction still requires independent audit.",
+        "reason": "The displayed threshold in the source proof loses a factor d and yields only sqrt(Delta/(d(1-2eta))) at its endpoint. A corrected construction may prove the theorem, but that repair is a source deviation and the probability quantifier remains to be discharged.",
     },
     {
         "claim_id": 5,
@@ -122,8 +122,8 @@ CONTRACTS = [
             "gamma_degree_exponent": -1 / 4,
         },
         "required_evidence": "exact likelihood-ratio projection and correlation-bound certificate",
-        "verdict": "BLOCKED",
-        "reason": "Linear-versus-quadratic prediction is unrelated to a low-degree likelihood-ratio theorem; the exact construction requires audit.",
+        "verdict": "FALSIFIED",
+        "reason": "Definition 4.1 has null P(y=+1)=eta, while Definition 4.3 uses P(y=+1)=1-eta under both its stated null and alternatives. At eta=1/3, p(z)=sum_i y_i is already a degree-one 1-distinguisher for every T>=2.",
     },
     {
         "claim_id": 6,
