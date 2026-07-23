@@ -10,6 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 ARTIFACTS = ROOT / ".openresearch" / "artifacts" / "pseudocode_audit"
+FROZEN_BASELINE_SHA = "4b976c8acfb983bb4d74d944f9a5ba25e98667e7"
 
 
 def loaded_names(function: ast.FunctionDef) -> set[str]:
@@ -33,7 +34,7 @@ def audit() -> dict[str, bool]:
     halfspace_path = ROOT / "repro/src/halfspaces.py"
     verifier_path = ROOT / "repro/src/verify_hs.py"
     baseline_verifier = subprocess.check_output(
-        ["git", "show", "origin/orx/frozen-judged-baseline:repro/src/verify_hs.py"],
+        ["git", "show", f"{FROZEN_BASELINE_SHA}:repro/src/verify_hs.py"],
         cwd=ROOT,
         text=True,
     )
@@ -98,6 +99,7 @@ def main() -> int:
     sha = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     raw = {
         "git_sha": sha,
+        "frozen_baseline_sha": FROZEN_BASELINE_SHA,
         "fixed_command": "uv run --frozen python repro/src/verify_hs.py",
         "runtime_seconds": round(time.perf_counter() - started, 6),
         "issues": issues,
