@@ -1,0 +1,19 @@
+{
+  "dataset": "ICML-2026-agent-repro/verdicts",
+  "dataset_revision": "4feef54d43b176732d46fb04a6367506c2fe7b42",
+  "filter": {
+    "space_id": "DineshAI/418BWmKIzX"
+  },
+  "judge_time": "2026-07-23T16:29:54+00:00",
+  "hf_head": "031b53f092c2ff4eef64d8e8a5b9d907956f4176",
+  "score": "4/12",
+  "claim_verdicts": {
+    "1": "toy",
+    "2": "inconclusive",
+    "3": "toy",
+    "4": "inconclusive",
+    "5": "toy",
+    "6": "toy"
+  },
+  "actionable_criticism": "The exact-claim page referred to proof certificates but did not render their content, so the certificates and counterexamples were not independently assessable from the logbook."
+}

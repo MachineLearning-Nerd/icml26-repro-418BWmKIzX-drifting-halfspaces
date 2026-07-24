@@ -68,6 +68,8 @@ orx create-experiment 4cf28579-1f96-497d-8eca-243c601eb070 --title "Claim 1 regr
 orx create-experiment 4cf28579-1f96-497d-8eca-243c601eb070 --title "Claim 4 corrected RCN lower bound" --parent 0f6d045b
 orx create-experiment 4cf28579-1f96-497d-8eca-243c601eb070 --title "Final five-claim cumulative suite" --parent 5aa62c18
 orx create-experiment 4cf28579-1f96-497d-8eca-243c601eb070 --title "Release candidate artifacts" --parent c29ffb3d-43c4-4074-b94e-685af9eb1d56
+orx create-experiment 4cf28579-1f96-497d-8eca-243c601eb070 --title "Judge-visible proof dossiers" --parent ab175eac-ede7-4f7d-bec0-4bd21015f975
+orx create-experiment 4cf28579-1f96-497d-8eca-243c601eb070 --title "Visible dossier release package" --parent eba9a3c6-bd91-4d59-8c5b-f0079434d100
 ```
 
 The abbreviated parent identifiers above are the unambiguous prefixes printed
@@ -99,6 +101,8 @@ orx exp run 0f6d045b --backend local
 orx exp run 5aa62c18 --backend local
 orx exp run 601d7a46 --backend local
 orx exp run c29ffb3d-43c4-4074-b94e-685af9eb1d56 --backend local
+orx exp run eba9a3c6-bd91-4d59-8c5b-f0079434d100 --backend local
+orx exp run 7bd35fb8-ba9f-4caf-a98a-b836b583a585 --backend local
 ```
 
 The pseudocode audit was relaunched twice after its first two environment-level
@@ -117,10 +121,19 @@ orx logs f72af367-d592-43c4-9728-a55abb41cfd9
 orx logs fd92940d-db50-419d-a9cd-2db19b224988
 orx logs ebe095fc-543a-4576-84e0-e72a8d73770e
 orx logs c3eea52a-7cef-44df-b491-c80d2084b682
+orx logs 12cd69cb-b84e-4906-9b83-1543d0596847
+orx logs 6e1a5d8e-d89c-49f3-b099-61658120a045
 ```
 
 Findings were recorded throughout with `orx exp desc <experiment-id> --set
 "<findings>"`.
+
+The first judge-visible run failed only because the exact phrase checked by the
+new page validator crossed a Markdown newline. The one-line presentation fix
+did not change a claim contract, certificate, or verdict. The rerun at commit
+`e15d58304aa43312ba289b074c40be2676d66880` passed the claim suite, all six
+artifact mutations, the visible-logbook verifier, and all six page-removal
+mutations.
 
 ## Reader and release validation
 
@@ -133,9 +146,45 @@ jq empty <candidate>/logbook.json
 file --brief --mime-type <each-upload-path>
 shasum -a 256 <each-upload-path>
 comm -23 <judged-path-list> <candidate-path-list>
+git ls-remote https://huggingface.co/spaces/DineshAI/418BWmKIzX HEAD
 ```
 
 The exact report images were visually inspected after generation. The candidate
 Space tree was formed in a temporary directory by applying
-`release/hf-space-overlay/` over the exact judged checkout. No Hugging Face
-upload command has been run.
+`release/hf-space-overlay/` over exact published revision
+`031b53f092c2ff4eef64d8e8a5b9d907956f4176`.
+
+## Approved publication
+
+After explicit user approval, an 82-file text-only staging directory was built
+from `release/hf-upload-allowlist.txt` and verified against
+`release/hf-upload-manifest.sha256`.
+
+The initial CLI command:
+
+```text
+hf upload DineshAI/418BWmKIzX <staging-directory> . --type space --revision main --commit-message "Publish judge-visible proof dossiers"
+```
+
+made no commit because the CLI's unnecessary repository-creation probe hit a
+Space-creation rate limit. Publication then used the authenticated
+`huggingface_hub.HfApi.create_commit` API directly against the existing Space,
+with 82 `CommitOperationAdd` objects, `repo_type="space"`, and
+`revision="main"`. No repository-creation or deletion API was called.
+
+The successful Space revision was:
+
+```text
+399bc7f2f4ae1b338475026bb2c5300984d739e5
+```
+
+Post-publication verification used:
+
+```text
+git ls-remote https://huggingface.co/spaces/DineshAI/418BWmKIzX HEAD
+hf download DineshAI/418BWmKIzX --type space --revision 399bc7f2f4ae1b338475026bb2c5300984d739e5 --local-dir <verification-directory>
+```
+
+The downloaded revision matched all 82 approved hashes, retained all 91 paths
+from the previous revision, and contained 171 files. It is marked awaiting the
+live judge; the prior 4/12 score remains current until a new verdict appears.

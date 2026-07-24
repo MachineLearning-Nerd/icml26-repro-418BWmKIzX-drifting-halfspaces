@@ -1,0 +1,62 @@
+{
+  "asymptotic_scope": "The little-o statement is interpreted over d>=40 with d*Delta/q^3 -> 0; fixed finitely many smaller dimensions do not alter the asymptotic lower bound.",
+  "capacity_lemma": {
+    "domain": "0<=q<=1",
+    "statement": "C(q)=sum_{k>=1}q^(2k)/(2k(2k-1)) <=q^2 sum_{k>=1}1/(2k(2k-1))=q^2 log 2<q^2"
+  },
+  "construction": {
+    "active_width": "L=Delta*m_star/q",
+    "long_horizon": "if T>=ceil(m_star), drift the threshold during the final ceil(m_star) steps by L/ceil(m_star)<=Delta/q per step",
+    "m_star": "sqrt(d/(Delta*q))/80",
+    "marginal": "sample I uniform in [d], G uniform in (0,1), X=G e_I",
+    "prior": "Z uniform on {0,1}^d",
+    "short_horizon": "if T<ceil(m_star), use the final target statically for all T steps",
+    "target": "h_Z(G e_i)=+1 iff Z_i=1 and G>=1-L_t; labels pass through eta-RCN"
+  },
+  "proof_obligations": {
+    "all_horizons": {
+      "basis": "the drifting construction covers T>=ceil(m_star); the static construction covers shorter T with no larger information budget",
+      "status": "discharged"
+    },
+    "halfspace_realizability": {
+      "basis": "h_Z(x)=sign(sum_i Z_i x_i-(1-L_t)) on the support {G e_i}",
+      "status": "discharged"
+    },
+    "information_budget": {
+      "basis": "BSC capacity C(q)<=q^2 and sum_t L_t q^2 <=2*Delta*q*m_star^2=d/3200<d/1600",
+      "status": "discharged"
+    },
+    "probability_quantifier": {
+      "basis": "generalized Fano with the Hamming ball of radius d/4 gives average success <1/2 for d>=40; therefore some Z has success <1/2",
+      "status": "discharged"
+    },
+    "rcn_contract": {
+      "basis": "each target label is independently flipped with eta=(1-q)/2",
+      "status": "discharged"
+    },
+    "risk_reduction": {
+      "basis": "a wrong majority bit forces disagreement on at least half its active interval; d/4 wrong bits imply RCN excess >=Delta*m_star/8",
+      "status": "discharged"
+    },
+    "tv_drift": {
+      "basis": "target disagreement per step <=Delta/q and an RCN label channel contracts it by q, hence joint TV<=Delta",
+      "status": "discharged"
+    }
+  },
+  "proof_obligations_discharged": true,
+  "source_deviation": "The construction removes the extra d from the source threshold. This is an independent repair, not validation of the printed proof.",
+  "symbolic_checks": {
+    "certified_information_budget": "d/1600",
+    "d40_success_is_below_half": true,
+    "d40_success_upper_bound": 0.13724791747815518,
+    "excess_is_target_over_640": true,
+    "excess_lower_bound": "sqrt(Delta)*sqrt(d)/(640*sqrt(q))",
+    "fano_denominator": "log(3**(3/4)/2)",
+    "final_width": "sqrt(Delta)*sqrt(d)/(80*q**(3/2))",
+    "long_information_upper_bound": "d/3200",
+    "static_information_equals_d_over_6400": true,
+    "static_mutual_information_upper_bound": "d/6400",
+    "width_under_assumption": "L<1/80 follows from d*Delta<q^3"
+  },
+  "verdict": "VERIFIED"
+}

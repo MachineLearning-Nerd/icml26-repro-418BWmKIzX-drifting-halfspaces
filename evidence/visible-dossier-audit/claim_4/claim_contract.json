@@ -1,0 +1,30 @@
+{
+  "anchor": "S2.Thmtheorem2",
+  "assumptions": [
+    "(1-2eta)^3 > d Delta"
+  ],
+  "claim_id": 4,
+  "conclusion": {
+    "d_exponent": 0.5,
+    "delta_exponent": 0.5,
+    "forbidden_error": "opt_T + o(sqrt(d Delta/(1-2eta)))"
+  },
+  "domain": "halfspaces under eta-random classification noise",
+  "paper": {
+    "html_sha256": "6b04e5b5b624ce99606d018a6dcfd2278d1448b36e555b0b7ce41c95105e1240",
+    "html_url": "https://ar5iv.labs.arxiv.org/html/2606.11149",
+    "paper_id": "2606.11149v1",
+    "retrieved_at_utc": "2026-07-23T13:09:55Z",
+    "source_sha256": "9679e85743076e711da671b3a875182173441e5f6ecb41e7e56d3d36647e9221",
+    "source_url": "https://export.arxiv.org/e-print/2606.11149"
+  },
+  "quantifiers": [
+    "for every T > 0 and Delta in (0,1)",
+    "there exists a family of instances",
+    "no algorithm attains the stated little-o excess error with probability 1/2 on every instance"
+  ],
+  "reason": "An independent corrected construction discharges halfspace realizability, RCN, TV drift, an O(d/1600) mutual-information budget, generalized-Fano probability below 1/2, the Hamming-to-risk reduction, and both short and long horizons. The repair is explicitly distinguished from the paper's factor-d-defective printed proof.",
+  "required_evidence": "information-theoretic lower-bound construction and testing reduction",
+  "theorem": "2.2",
+  "verdict": "VERIFIED"
+}

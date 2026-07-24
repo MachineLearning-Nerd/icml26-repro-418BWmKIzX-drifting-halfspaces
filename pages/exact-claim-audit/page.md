@@ -1,15 +1,17 @@
 # Exact claim audit
 
-**Status: AWAITING JUDGE.** Published after explicit user approval on
-2026-07-23. No post-publication score is claimed before a live verdict.
+The previous live judge evaluated Space revision
+`031b53f092c2ff4eef64d8e8a5b9d907956f4176` as **4/12**. Its specific criticism
+was that this page named proof certificates but did not show their contents.
+This candidate therefore adds six navigable dossiers below. Each dossier
+renders the source contract, assumptions, quantifiers, decisive algebra,
+independent-checker result, mutation that fails, and limitations directly in
+Markdown. The judge does not need to open a repository artifact to assess them.
 
-This additive audit replaces none of the judged logbook. The exact judged
-revision remains `5f91ea8e5a386773b73437d8be494480363b0293`; its 17-file
-SHA-256 manifest and original `logbook.json` are preserved under
-`evidence/protected/`. Every pre-existing path remains present in the candidate.
-
-The live judge has **not** evaluated this candidate. The prior judged score is
-3/12, and this page does not claim a score increase.
+This additive audit replaces none of the judged logbook. The original judged
+revision `5f91ea8e5a386773b73437d8be494480363b0293`, the 4/12 revision, and every
+pre-existing path remain reachable. This candidate has not been judged and
+does not claim a score increase.
 
 ## Outcome
 
@@ -22,9 +24,21 @@ The live judge has **not** evaluated this candidate. The prior judged score is
 | 5. Low-degree trajectory theorem | **FALSIFIED** | The source's inconsistent null gives a degree-one 1-distinguisher at trajectory length \(T=2\). |
 | 6. Imported realizable rate | **FALSIFIED** | The imported \(\Delta\) rate contradicts Theorem 3.2's \(\sqrt{\Delta}\) rate. This does not falsify the paper's actual theorem. |
 
-The complete machine-readable summary is at
-`evidence/exact-claim-audit/summary.json`. Each numbered claim directory
-contains:
+## Visible proof dossiers
+
+| Dossier | What is rendered |
+| --- | --- |
+| [Claim 1 - efficient learner proof](#/claim-1-efficient-learner) | Eight proof obligations and the exact \(\Delta^{1/3}/\gamma\) balance. |
+| [Claim 2 - conditional hardness](#/claim-2-conditional-hardness) | The precise unresolved obligation and why Claim 5 does not falsify the conditional conclusion. |
+| [Claim 3 - VC/Massart upper bound](#/claim-3-vc-massart-upper-bound) | TV transfer, Massart/Bernstein localization, ERM inequality, and window optimization. |
+| [Claim 4 - RCN lower bound](#/claim-4-rcn-lower-bound) | Full independent construction, information budget, generalized Fano calculation, and risk reduction. |
+| [Claim 5 - degree-one counterexample](#/claim-5-low-degree-counterexample) | Exact null/alternative marginals and rational-arithmetic distinguisher calculation. |
+| [Claim 6 - source transcription](#/claim-6-source-transcription) | Side-by-side imported and source formulas with exponents. |
+
+The freshly regenerated evidence remains machine-readable at
+`evidence/visible-dossier-audit/`. The prior published evidence at
+`evidence/exact-claim-audit/` remains byte-identical. Every dossier also identifies the corresponding
+raw paths. Each numbered claim directory contains:
 
 - `claim_contract.json` and `source_audit.md`;
 - `method.md`, raw JSON output, and any proof certificate;

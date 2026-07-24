@@ -1,12 +1,19 @@
 Candidate logbook JSON parse: PASS
-Judged path subset check: PASS (17/17 present)
-Judged SHA-256 manifest check: PASS (17/17 exact)
-Upload SHA-256 manifest check: PASS (75/75 exact)
-Upload overlay MIME check: PASS (75/75 text or JSON)
+Previously published path subset check: PASS (91/91 present)
+Previously published SHA-256 manifest check: PASS (91/91 exact in protected source tree)
+Upload SHA-256 manifest check: PASS (82/82 exact)
+Upload overlay MIME check: PASS (82/82 text or JSON)
 Non-text upload paths: 0
-Evidence JSON parse: PASS
+Visible-dossier evidence JSON parse: PASS
+Visible logbook verifier: PASS
+Visible page negative controls: PASS (6/6 rejected)
+Claim artifact negative controls: PASS (6/6 rejected)
 Marimo check --strict: PASS
 Git whitespace check: PASS
 Report figures present: PASS (4/4)
-Candidate publication performed: NO
+Candidate publication performed: YES
+Published HF revision: 399bc7f2f4ae1b338475026bb2c5300984d739e5
+Post-publication upload hashes: PASS (82/82 exact)
+Post-publication prior path subset: PASS (91/91 present)
+Post-publication candidate file count: 171
 Result: PASS

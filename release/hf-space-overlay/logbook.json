@@ -8,7 +8,7 @@
     "icml2026-repro",
     "paper-418BWmKIzX"
   ],
-  "updated_at": "2026-07-23T14:30:00+00:00",
+  "updated_at": "2026-07-24T00:25:00+00:00",
   "root": {
     "slug": "index",
     "title": "Repro - Efficiently Learning Drifting Halfspaces with Massart Noise",
@@ -48,10 +48,47 @@
         "slug": "exact-claim-audit",
         "title": "Exact claim audit",
         "file": "pages/exact-claim-audit/page.md",
-        "children": []
+        "children": [
+          {
+            "slug": "claim-1-efficient-learner",
+            "title": "Claim 1 - Efficient learner proof",
+            "file": "pages/exact-claim-audit/claim-1/page.md",
+            "children": []
+          },
+          {
+            "slug": "claim-2-conditional-hardness",
+            "title": "Claim 2 - Conditional hardness",
+            "file": "pages/exact-claim-audit/claim-2/page.md",
+            "children": []
+          },
+          {
+            "slug": "claim-3-vc-massart-upper-bound",
+            "title": "Claim 3 - VC/Massart upper bound",
+            "file": "pages/exact-claim-audit/claim-3/page.md",
+            "children": []
+          },
+          {
+            "slug": "claim-4-rcn-lower-bound",
+            "title": "Claim 4 - RCN lower bound",
+            "file": "pages/exact-claim-audit/claim-4/page.md",
+            "children": []
+          },
+          {
+            "slug": "claim-5-low-degree-counterexample",
+            "title": "Claim 5 - Degree-one counterexample",
+            "file": "pages/exact-claim-audit/claim-5/page.md",
+            "children": []
+          },
+          {
+            "slug": "claim-6-source-transcription",
+            "title": "Claim 6 - Source transcription",
+            "file": "pages/exact-claim-audit/claim-6/page.md",
+            "children": []
+          }
+        ]
       }
     ]
   },
-  "agent_view_tokens": 3000,
-  "revision": "2026072314300000000"
+  "agent_view_tokens": 14000,
+  "revision": "2026072400250000000"
 }

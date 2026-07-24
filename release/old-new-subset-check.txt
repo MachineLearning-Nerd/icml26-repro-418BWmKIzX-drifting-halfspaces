@@ -1,16 +1,22 @@
 Space: DineshAI/418BWmKIzX
-Judged revision: 5f91ea8e5a386773b73437d8be494480363b0293
-Judged file count: 17
-Candidate file count: 91
-Upload overlay file count: 75
-Judged paths missing from candidate: 0
-Existing paths with changed bytes: 1
-Intentionally changed existing path: logbook.json
-Unchanged existing paths: 16
+Previously published revision: 031b53f092c2ff4eef64d8e8a5b9d907956f4176
+Previously published live score: 4/12
+Previously published file count: 91
+Candidate file count: 171
+Upload file count: 82
+Previously published paths missing from candidate: 0
+New candidate paths: 80
+Existing paths with changed bytes: 2
+Intentionally changed existing paths:
+  logbook.json
+  pages/exact-claim-audit/page.md
+Unchanged existing paths: 89
 Result: PASS
 
-The candidate was constructed by copying the exact judged revision and applying
-release/hf-space-overlay/ on top. The changed logbook only adds the
-exact-claim-audit navigation entry. Every old page, evidence page, README, and
-static asset remains byte-identical. The original logbook and the complete
-17-file SHA-256 manifest are additionally preserved under evidence/protected/.
+The candidate was constructed by checking out the exact 4/12 Space revision
+and applying release/hf-space-overlay/ on top. All 91 prior paths remain
+present. Only navigation and the exact-audit index change in place. The six
+claim pages, regenerated evidence namespace, and protected records are new.
+The prior exact-claim evidence, old pages, README, and static assets remain
+byte-identical. The original 3/12 judged revision and this 4/12 published
+revision both have protected manifests and logbook copies.

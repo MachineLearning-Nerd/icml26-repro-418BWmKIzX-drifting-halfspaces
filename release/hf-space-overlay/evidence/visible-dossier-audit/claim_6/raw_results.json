@@ -1,0 +1,13 @@
+{
+  "claim_id": 6,
+  "verdict": "FALSIFIED",
+  "proof_obligations_discharged": false,
+  "exact_contradiction": true,
+  "blocking_obligation": null,
+  "observations": {
+    "imported_delta_exponent": 1,
+    "source_delta_exponent": 0.5,
+    "imported_prior_delta_exponent": 1,
+    "source_prior_delta_exponent": 0.5
+  }
+}

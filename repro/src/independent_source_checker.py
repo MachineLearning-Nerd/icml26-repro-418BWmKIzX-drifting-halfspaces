@@ -24,6 +24,7 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("artifact_root", type=Path)
     parser.add_argument("--mutate-claim6-source-exponent", action="store_true")
+    parser.add_argument("--mutate-claim2-blocker", action="store_true")
     parser.add_argument("--mutate-claim5-null-marginal", action="store_true")
     parser.add_argument("--mutate-claim3-window", action="store_true")
     parser.add_argument("--mutate-claim1-epoch-exponent", action="store_true")
@@ -54,6 +55,14 @@ def main() -> int:
                 failures.append("claim 6: expected source/import mismatch disappeared")
             if contract["verdict"] != "FALSIFIED":
                 failures.append("claim 6: mismatch must yield FALSIFIED")
+        if claim_id == 2:
+            blocking_obligation = contract["required_evidence"]
+            if args.mutate_claim2_blocker:
+                blocking_obligation = ""
+            if not blocking_obligation:
+                failures.append("claim 2: BLOCKED without a named obligation")
+            if contract["verdict"] != "BLOCKED":
+                failures.append("claim 2: unresolved conditional claim must be BLOCKED")
         if claim_id == 1:
             raw = json.loads(
                 (args.artifact_root / "claim_1" / "raw_results.json").read_text()

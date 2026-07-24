@@ -1,0 +1,32 @@
+{
+  "anchor": "S2.Thmtheorem1",
+  "assumptions": [
+    "successive labeled distributions have total variation at most Delta",
+    "each distribution is realized by a member of the class with eta-Massart noise"
+  ],
+  "claim_id": 3,
+  "conclusion": {
+    "d_exponent": 0.5,
+    "delta_exponent": 0.5,
+    "error_upper_bound": "opt_t + O_tilde(sqrt(d Delta/(1-2eta)))"
+  },
+  "domain": "any binary concept class of VC dimension d under eta-Massart noise",
+  "paper": {
+    "html_sha256": "6b04e5b5b624ce99606d018a6dcfd2278d1448b36e555b0b7ce41c95105e1240",
+    "html_url": "https://ar5iv.labs.arxiv.org/html/2606.11149",
+    "paper_id": "2606.11149v1",
+    "retrieved_at_utc": "2026-07-23T13:09:55Z",
+    "source_sha256": "9679e85743076e711da671b3a875182173441e5f6ecb41e7e56d3d36647e9221",
+    "source_url": "https://export.arxiv.org/e-print/2606.11149"
+  },
+  "quantifiers": [
+    "for every drifting sequence satisfying the assumptions",
+    "there exists an information-theoretic algorithm A",
+    "for every t = Omega_tilde(d/((1-2eta)Delta))",
+    "with probability at least 9/10"
+  ],
+  "reason": "A fail-closed proof certificate discharges TV transfer, the Massart Bernstein condition, localized VC deviation, the ERM basic inequality, and the exact W=sqrt(d/((1-2eta)Delta)) optimization. It explicitly repairs three source-notation defects without changing the argument.",
+  "required_evidence": "localized VC/ERM proof certificate, not a dimension monotonicity sweep",
+  "theorem": "2.1",
+  "verdict": "VERIFIED"
+}

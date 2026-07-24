@@ -1,8 +1,18 @@
 {
   "paper": "418BWmKIzX",
+  "arxiv": "2606.11149",
   "tests_passed": true,
   "publication_gate_passed": true,
-  "claims_verified": 6,
-  "claims_total": 6,
-  "arxiv": "2606.11149"
+  "release_status": "awaiting_live_judge",
+  "candidate_published": true,
+  "candidate_judged": false,
+  "previous_live_score": "4/12",
+  "previous_hf_revision": "031b53f092c2ff4eef64d8e8a5b9d907956f4176",
+  "published_hf_revision": "399bc7f2f4ae1b338475026bb2c5300984d739e5",
+  "candidate_verdicts": {
+    "VERIFIED": 3,
+    "FALSIFIED": 2,
+    "BLOCKED": 1
+  },
+  "claimed_score_increase": false
 }
