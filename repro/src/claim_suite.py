@@ -286,6 +286,9 @@ def main() -> int:
     claim6_mutant_rc, claim6_mutant_output = run_checker(
         [str(ARTIFACT_ROOT), "--mutate-claim6-source-exponent"]
     )
+    claim2_mutant_rc, claim2_mutant_output = run_checker(
+        [str(ARTIFACT_ROOT), "--mutate-claim2-blocker"]
+    )
     claim3_mutant_rc, claim3_mutant_output = run_checker(
         [str(ARTIFACT_ROOT), "--mutate-claim3-window"]
     )
@@ -303,6 +306,7 @@ def main() -> int:
         return 1
     if 0 in {
         claim1_mutant_rc,
+        claim2_mutant_rc,
         claim3_mutant_rc,
         claim4_mutant_rc,
         claim5_mutant_rc,
@@ -321,6 +325,9 @@ def main() -> int:
             "CLAIM1_EXPECTED_NONZERO_EXIT=1\n"
             f"CLAIM1_OBSERVED_EXIT={claim1_mutant_rc}\n"
             f"{claim1_mutant_output}\n"
+            "CLAIM2_EXPECTED_NONZERO_EXIT=1\n"
+            f"CLAIM2_OBSERVED_EXIT={claim2_mutant_rc}\n"
+            f"{claim2_mutant_output}\n"
             "CLAIM3_EXPECTED_NONZERO_EXIT=1\n"
             f"CLAIM3_OBSERVED_EXIT={claim3_mutant_rc}\n"
             f"{claim3_mutant_output}\n"
@@ -370,6 +377,7 @@ def main() -> int:
         "verdicts": verdicts,
         "negative_control_exits": {
             "claim_1": claim1_mutant_rc,
+            "claim_2": claim2_mutant_rc,
             "claim_3": claim3_mutant_rc,
             "claim_4": claim4_mutant_rc,
             "claim_5": claim5_mutant_rc,
@@ -398,7 +406,8 @@ def main() -> int:
         print(f"CLAIM_{claim_id}_VERDICT={verdict}")
     print(
         "NEGATIVE_CONTROL_EXITS="
-        f"claim1:{claim1_mutant_rc},claim3:{claim3_mutant_rc},"
+        f"claim1:{claim1_mutant_rc},claim2:{claim2_mutant_rc},"
+        f"claim3:{claim3_mutant_rc},"
         f"claim4:{claim4_mutant_rc},"
         f"claim5:{claim5_mutant_rc},"
         f"claim6:{claim6_mutant_rc} "
