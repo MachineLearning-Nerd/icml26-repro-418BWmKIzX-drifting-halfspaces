@@ -1,0 +1,69 @@
+{
+  "claim_id": 4,
+  "verdict": "VERIFIED",
+  "proof_obligations_discharged": true,
+  "exact_contradiction": false,
+  "blocking_obligation": null,
+  "observations": {
+    "construction": {
+      "prior": "Z uniform on {0,1}^d",
+      "m_star": "sqrt(d/(Delta*q))/80",
+      "active_width": "L=Delta*m_star/q",
+      "long_horizon": "if T>=ceil(m_star), drift the threshold during the final ceil(m_star) steps by L/ceil(m_star)<=Delta/q per step",
+      "short_horizon": "if T<ceil(m_star), use the final target statically for all T steps",
+      "marginal": "sample I uniform in [d], G uniform in (0,1), X=G e_I",
+      "target": "h_Z(G e_i)=+1 iff Z_i=1 and G>=1-L_t; labels pass through eta-RCN"
+    },
+    "proof_obligations": {
+      "halfspace_realizability": {
+        "status": "discharged",
+        "basis": "h_Z(x)=sign(sum_i Z_i x_i-(1-L_t)) on the support {G e_i}"
+      },
+      "rcn_contract": {
+        "status": "discharged",
+        "basis": "each target label is independently flipped with eta=(1-q)/2"
+      },
+      "tv_drift": {
+        "status": "discharged",
+        "basis": "target disagreement per step <=Delta/q and an RCN label channel contracts it by q, hence joint TV<=Delta"
+      },
+      "information_budget": {
+        "status": "discharged",
+        "basis": "BSC capacity C(q)<=q^2 and sum_t L_t q^2 <=2*Delta*q*m_star^2=d/3200<d/1600"
+      },
+      "probability_quantifier": {
+        "status": "discharged",
+        "basis": "generalized Fano with the Hamming ball of radius d/4 gives average success <1/2 for d>=40; therefore some Z has success <1/2"
+      },
+      "risk_reduction": {
+        "status": "discharged",
+        "basis": "a wrong majority bit forces disagreement on at least half its active interval; d/4 wrong bits imply RCN excess >=Delta*m_star/8"
+      },
+      "all_horizons": {
+        "status": "discharged",
+        "basis": "the drifting construction covers T>=ceil(m_star); the static construction covers shorter T with no larger information budget"
+      }
+    },
+    "symbolic_checks": {
+      "final_width": "sqrt(Delta)*sqrt(d)/(80*q**(3/2))",
+      "width_under_assumption": "L<1/80 follows from d*Delta<q^3",
+      "static_mutual_information_upper_bound": "d/6400",
+      "static_information_equals_d_over_6400": true,
+      "long_information_upper_bound": "d/3200",
+      "certified_information_budget": "d/1600",
+      "excess_lower_bound": "sqrt(Delta)*sqrt(d)/(640*sqrt(q))",
+      "excess_is_target_over_640": true,
+      "fano_denominator": "log(3**(3/4)/2)",
+      "d40_success_upper_bound": 0.13724791747815518,
+      "d40_success_is_below_half": true
+    },
+    "capacity_lemma": {
+      "statement": "C(q)=sum_{k>=1}q^(2k)/(2k(2k-1)) <=q^2 sum_{k>=1}1/(2k(2k-1))=q^2 log 2<q^2",
+      "domain": "0<=q<=1"
+    },
+    "source_deviation": "The construction removes the extra d from the source threshold. This is an independent repair, not validation of the printed proof.",
+    "asymptotic_scope": "The little-o statement is interpreted over d>=40 with d*Delta/q^3 -> 0; fixed finitely many smaller dimensions do not alter the asymptotic lower bound.",
+    "proof_obligations_discharged": true,
+    "verdict": "VERIFIED"
+  }
+}

@@ -8,7 +8,7 @@
     "icml2026-repro",
     "paper-418BWmKIzX"
   ],
-  "updated_at": "2026-07-24T05:30:00+00:00",
+  "updated_at": "2026-07-24T00:25:00+00:00",
   "root": {
     "slug": "index",
     "title": "Repro - Efficiently Learning Drifting Halfspaces with Massart Noise",
@@ -90,5 +90,5 @@
     ]
   },
   "agent_view_tokens": 14000,
-  "revision": "2026072405300000000"
+  "revision": "2026072400250000000"
 }

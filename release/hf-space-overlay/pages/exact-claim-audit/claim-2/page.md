@@ -69,7 +69,7 @@ and exact Claim 5/6 contradictions agree.
 ```
 
 Raw paths:
-`evidence/exact-claim-audit/claim_2/claim_contract.json`,
+`evidence/visible-dossier-audit/claim_2/claim_contract.json`,
 `raw_results.json`, and `independent_checker_output.txt`.
 
 ## Negative control

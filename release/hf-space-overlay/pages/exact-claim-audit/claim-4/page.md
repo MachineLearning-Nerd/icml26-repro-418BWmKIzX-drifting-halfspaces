@@ -96,6 +96,10 @@ The checker independently parses the source contract, recomputes the width,
 capacity and information inequalities, evaluates the \(d=40\) probability
 bound, and checks the Hamming-to-risk reduction and both horizon cases.
 
+Raw paths:
+`evidence/visible-dossier-audit/claim_4/claim_contract.json`,
+`raw_results.json`, and `proof_certificate.json`.
+
 ## Negative control
 
 The observed mutant replaces the certified information allowance by the

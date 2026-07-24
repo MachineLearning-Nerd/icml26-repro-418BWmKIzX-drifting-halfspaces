@@ -55,6 +55,10 @@ The checker parses the source theorem's symbolic rate and the imported claim,
 extracts their \(\Delta\) exponents, and requires the exact mismatch
 \(1\ne1/2\) in both formulas.
 
+Raw paths:
+`evidence/visible-dossier-audit/claim_6/claim_contract.json` and
+`raw_results.json`.
+
 ## Negative control
 
 The mutant changes the source exponent to one. The mismatch then disappears,

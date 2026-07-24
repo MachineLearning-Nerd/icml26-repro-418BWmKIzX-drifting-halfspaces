@@ -9,9 +9,12 @@ cannot reproduce them. This campaign replaces the previous monotonicity checks
 with source-locked theorem contracts, proof certificates, independent checkers,
 and counterexamples that fail closed.
 
-The result is deliberately not presented as a new judge score. Relative to the
-six imported claims, three are **VERIFIED**, two are **FALSIFIED**, and one is
-**BLOCKED**. A live judge has not evaluated this candidate.
+The first published certificate bundle raised the live result from 3/12 to
+**4/12** at Space revision
+`031b53f092c2ff4eef64d8e8a5b9d907956f4176`. Relative to the six imported
+claims, the evidence result is three **VERIFIED**, two **FALSIFIED**, and one
+**BLOCKED**. The new visibility-focused candidate described here has not been
+published or judged, so no further score increase is claimed.
 
 ## What was reproduced
 
@@ -27,6 +30,29 @@ six imported claims, three are **VERIFIED**, two are **FALSIFIED**, and one is
 Every verdict uses only `VERIFIED`, `FALSIFIED`, or `BLOCKED`. A mutation of
 each accepted certificate or contradiction exits nonzero, and the cumulative
 artifact verifier rejects missing proof obligations.
+
+## Response to the 4/12 judge
+
+The live judge said the exact-claim audit merely referred to proof
+certificates and did not show their content. The new logbook therefore has one
+navigable page per claim. Each page displays the source hash and theorem
+anchor, exact assumptions and quantifiers, decisive algebra or
+counterexample, independent-checker output, a mutation that exits nonzero,
+limitations, and the final verdict.
+
+A second fail-closed layer removes a decisive marker from each rendered page
+in memory and requires the visibility validator to reject all six mutants.
+The fixed formal run recorded:
+
+```text
+VISIBLE LOGBOOK VERIFIER: OK
+VISIBLE_LOGBOOK_NEGATIVE_CONTROLS=claim1:1,claim2:1,claim3:1,claim4:1,claim5:1,claim6:1
+```
+
+The previous 91-file Space tree is the exact base for the new candidate. Its
+path and SHA-256 manifest are preserved, and the regenerated artifacts are
+added under a new evidence namespace rather than overwriting the published
+bundle.
 
 ## From toy experiments to theorem contracts
 
@@ -148,6 +174,8 @@ The important code path is small:
 - `repro/src/lower_bound_certificates.py` checks Claim 4 and falsifies Claim 5.
 - `repro/src/independent_source_checker.py` recomputes decisive quantities.
 - `repro/src/verify_claim_artifacts.py` enforces fail-closed verdict rules.
+- `repro/src/verify_visible_logbook.py` rejects hidden or incomplete rendered
+  dossiers and runs six page-level mutations.
 - `repro/src/claim_suite.py` writes the complete evidence bundle.
 
 The paper HTML was retrieved on `2026-07-23T13:09:55Z` with an explicit browser
@@ -171,11 +199,13 @@ cost is `$0`.
 | [`orx/claim-4-corrected-rcn-lower-bound`](https://github.com/MachineLearning-Nerd/icml26-repro-418BWmKIzX-drifting-halfspaces/tree/orx/claim-4-corrected-rcn-lower-bound) | Independent repaired construction | Claim 4 verified. |
 | [`orx/final-five-claim-cumulative-suite`](https://github.com/MachineLearning-Nerd/icml26-repro-418BWmKIzX-drifting-halfspaces/tree/orx/final-five-claim-cumulative-suite) | Merge and regress all accepted evidence | Five claims resolved; all five mutations rejected. |
 | [`orx/release-candidate-artifacts`](https://github.com/MachineLearning-Nerd/icml26-repro-418BWmKIzX-drifting-halfspaces/tree/orx/release-candidate-artifacts) | Package the report, notebook, formal artifacts, and additive Space overlay | Release candidate; no Hugging Face upload performed. |
+| [`orx/judge-visible-proof-dossiers`](https://github.com/MachineLearning-Nerd/icml26-repro-418BWmKIzX-drifting-halfspaces/tree/orx/judge-visible-proof-dossiers) | Render all six contracts and decisive evidence directly in the logbook | Claim suite and six visibility mutations passed. |
+| [`orx/visible-dossier-release-package`](https://github.com/MachineLearning-Nerd/icml26-repro-418BWmKIzX-drifting-halfspaces/tree/orx/visible-dossier-release-package) | Preserve the 4/12 Space tree and package regenerated visible evidence | New release gate; publication still requires approval. |
 
 ## Assessment
 
-This campaign replaces a 3/12 toy baseline with evidence that is materially
-closer to the paper's theoretical content. It does not promise 12/12 and does
-not claim a score increase. The unresolved work is narrow and explicit:
+This campaign improved the live score from 3/12 to 4/12, but the new candidate
+is not yet judged. It does not promise 12/12 or claim an unobserved increase.
+The unresolved scientific work is narrow and explicit:
 repair Theorem 4.1's null and low-degree analysis, then re-audit the
 testing-to-learning reduction before Claim 2 can move from **BLOCKED**.

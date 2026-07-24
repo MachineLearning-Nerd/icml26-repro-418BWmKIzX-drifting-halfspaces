@@ -1,0 +1,2 @@
+VERDICT=FALSIFIED
+REASON=The judged claim changes both Delta exponents from 1/2 to 1. The exact source theorem and comparison both contain sqrt(Delta).

@@ -35,8 +35,9 @@ does not claim a score increase.
 | [Claim 5 - degree-one counterexample](#/claim-5-low-degree-counterexample) | Exact null/alternative marginals and rational-arithmetic distinguisher calculation. |
 | [Claim 6 - source transcription](#/claim-6-source-transcription) | Side-by-side imported and source formulas with exponents. |
 
-The same evidence remains machine-readable at
-`evidence/exact-claim-audit/`. Every dossier also identifies the corresponding
+The freshly regenerated evidence remains machine-readable at
+`evidence/visible-dossier-audit/`. The prior published evidence at
+`evidence/exact-claim-audit/` remains byte-identical. Every dossier also identifies the corresponding
 raw paths. Each numbered claim directory contains:
 
 - `claim_contract.json` and `source_audit.md`;

@@ -84,6 +84,10 @@ the alternative probabilities, expectations, variance, standardized gap,
 degree, and the \(T\geq2\) quantifier. It also confirms that degree one lies
 below the claimed diverging threshold in the stated asymptotic regime.
 
+Raw paths:
+`evidence/visible-dossier-audit/claim_5/claim_contract.json`,
+`raw_results.json`, and `proof_certificate.json`.
+
 ## Negative control
 
 The mutant changes Definition 4.1's null probability from \(1/3\) to \(2/3\).

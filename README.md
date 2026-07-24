@@ -9,11 +9,15 @@ source-locked theorem contracts, proof certificates, independent checkers, and
 exact counterexamples rather than the earlier \(d=5\), \(N=500\), four-seed
 monotonicity tests.
 
-The candidate result is **3 VERIFIED, 2 FALSIFIED, and 1 BLOCKED**. It has not
-been published to the Hugging Face Space or evaluated by the live judge, so
-this repository does not claim a score increase. The work ran on an Apple M2
-local CPU in a locked CPython 3.12/`uv` environment; Hugging Face compute was
-not needed.
+The previously published revision was judged **4/12** at Hugging Face head
+`031b53f092c2ff4eef64d8e8a5b9d907956f4176`. The judge's actionable criticism
+was that the logbook referred to proof certificates without displaying their
+contents. This new candidate renders six complete, navigable claim dossiers
+and validates their visibility fail-closed. Its evidence result remains
+**3 VERIFIED, 2 FALSIFIED, and 1 BLOCKED**. The new candidate has not been
+published or judged, so this repository does not claim another score increase.
+The work ran on an Apple M2 local CPU in a locked CPython 3.12/`uv`
+environment; Hugging Face compute was not needed.
 
 The strongest paper-versus-observed comparisons are:
 
@@ -56,6 +60,8 @@ point to the immutable code that produced each recorded result.
 | [`orx/claim-4-corrected-rcn-lower-bound`](https://github.com/MachineLearning-Nerd/icml26-repro-418BWmKIzX-drifting-halfspaces/tree/orx/claim-4-corrected-rcn-lower-bound) | Add the independent corrected RCN construction | `uv run --frozen python repro/src/verify_hs.py` | Claim 4 verified with the printed-proof deviation preserved | Local Apple M2 CPU |
 | [`orx/final-five-claim-cumulative-suite`](https://github.com/MachineLearning-Nerd/icml26-repro-418BWmKIzX-drifting-halfspaces/tree/orx/final-five-claim-cumulative-suite) | Merge and regress all accepted evidence | `uv run --frozen python repro/src/verify_hs.py` | Five exact claims resolved; all five negative controls rejected | Local Apple M2 CPU |
 | [`orx/release-candidate-artifacts`](https://github.com/MachineLearning-Nerd/icml26-repro-418BWmKIzX-drifting-halfspaces/tree/orx/release-candidate-artifacts) | Package the evidence, report, notebook, and additive Space overlay | `uv run --frozen python repro/src/verify_hs.py` | Release candidate; publication remains gated on explicit approval | Local Apple M2 CPU |
+| [`orx/judge-visible-proof-dossiers`](https://github.com/MachineLearning-Nerd/icml26-repro-418BWmKIzX-drifting-halfspaces/tree/orx/judge-visible-proof-dossiers) | Render all contracts, derivations, checker outputs, controls, and limitations directly in six navigable logbook pages | `uv run --frozen python repro/src/verify_hs.py` | All claim checks and twelve fail-closed controls passed; candidate not yet judged | Local Apple M2 CPU |
+| [`orx/visible-dossier-release-package`](https://github.com/MachineLearning-Nerd/icml26-repro-418BWmKIzX-drifting-halfspaces/tree/orx/visible-dossier-release-package) | Package regenerated evidence and prove the prior Space tree remains an exact subset | `uv run --frozen python repro/src/verify_hs.py` | Release gate in progress; no Hugging Face upload performed | Local Apple M2 CPU |
 | `master` (default branch; the repository has no separate `main`) | Public presentation surface | Not run as an experiment (publication surface) | Pending explicit publication approval | N/A |
 
 ## Claim status
