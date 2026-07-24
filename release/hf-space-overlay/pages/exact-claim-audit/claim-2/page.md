@@ -43,8 +43,8 @@ has \(\Pr(y=+1)=1/3\), while the hard-instance null and alternatives have
 \(\Pr(y=+1)=2/3\). The degree-one statistic
 \(p=\sum_i y_i\) already distinguishes at \(T=2\).
 
-That contradiction invalidates the paper's supplied proof route. It **does not
-logically falsify** this conditional claim: falsification would require either
+That contradiction invalidates the paper's supplied proof route. It **does not logically falsify**
+this conditional claim: falsification would require either
 an efficient learner contradicting the quantified conclusion or a logical
 contradiction under a corrected conjecture and reduction. Neither is present.
 
